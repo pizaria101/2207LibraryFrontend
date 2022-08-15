@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title>Book Viewer</title>
+</head>
+<body>
+    <nav><a href="">To Book Registration</a></nav>
+    <h1>Book Viewer</h1>
+
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Title</th><th>Author</th><th>Available</th></tr>
+        </thead>
+        <tbody id="bookTableBody">
+        </tbody>
+    </table>
+    
+</body>
+<script>
+
+    const bookTableBody = document.getElementById("bookTableBody");
+
+    // fetching the data is a separate function from rendering the data
+    // async functions ALWAYS RETURN A PROMISE
+    async function getBooks(){
+        const httpResponse = await fetch("http://d6d4-2603-301f-1625-c000-ede3-8275-d0c3-fe31.ngrok.io/books");
+        const books = await httpResponse.json();
+        return books;
+
+    }
+
+    async function renderBookTable(){
+
+        const testBooks = await getBooks();// make sure that you await any async functions that you call
+
+        for(const book of testBooks){
+
+            const bookRow = document.createElement("tr");
+
+            const bookIdData = document.createElement("td");
+            bookIdData.innerText = book.id
+
+            const bookTitleData = document.createElement("td");
+            bookTitleData.innerText = book.title;
+
+            const bookAuthorData = document.createElement("td");
+            bookAuthorData.innerText = book.author;
+
+            const bookAvailableData = document.createElement("td");
+            bookAvailableData.innerText = book.returnDate === 0 ? "Yes" : "No";
+
+            bookRow.appendChild(bookIdData);
+            bookRow.appendChild(bookTitleData);
+            bookRow.appendChild(bookAuthorData);
+            bookRow.appendChild(bookAvailableData);
+
+            bookTableBody.appendChild(bookRow);
+        }
+    }
+
+    renderBookTable();
+
+</script>
+</html>
